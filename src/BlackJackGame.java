@@ -2,7 +2,6 @@ import java.util.Scanner;
 
 //TODO soft aces
 //TODO player money
-//TODO reshuffle deck
 
 public class BlackJackGame {
     Scanner scanner;
@@ -33,6 +32,9 @@ public class BlackJackGame {
                 case "x":
                     nextRound = false;
                     break;
+                default:
+                    System.out.println("Error: incorrect key entered");
+                    nextRound = false;
             }
         }
 
@@ -44,8 +46,8 @@ public class BlackJackGame {
         boolean dealerTurnOver = false;
         player.getPlayerHand().cardsInHand.clear();
         dealer.getDealerHand().cardsInHand.clear();
-        player.score = 0;
-        dealer.score = 0;
+        player.setScore(0);
+        dealer.setScore(0);
         if(newDeck.playDeck.size() <= 10){
             newDeck = new Deck(numDecks);
             newDeck.shuffle();
@@ -58,11 +60,10 @@ public class BlackJackGame {
         dealer.addCard(newDeck.drawCard());
         System.out.println("Dealer's face up card: " + dealer.getDealerFaceUpCard().toString());
         System.out.println("Your cards: " + player.getPlayerHand().toString());
-        System.out.println("Your score: " + player.score);
+        System.out.println("Your score: " + player.getScore());
         playerTurnOver = player.checkBlackjack();
-        if(dealer.getDealerFaceUpCard().getCardRank().getValue() >= 10){
-            dealerTurnOver = dealer.checkBlackjack();
-        }
+        dealer.setScore(dealer.getScore());
+        dealerTurnOver = dealer.checkBlackjack();
         while(!dealerTurnOver){
             while(!playerTurnOver){
                 if(player.getPlayerHand().cardsInHand.size() == 2){
@@ -74,20 +75,21 @@ public class BlackJackGame {
                 playerChoice = scanner.next();
                 playerTurnOver = evaluatePlayerChoice(playerChoice);
                 System.out.println("Your cards: " + player.getPlayerHand().toString());
-                System.out.println("Your score: " + player.score);
+                System.out.println("Your score: " + player.getScore());
             }
-            if(player.score > 21){
+            if(player.getScore() > 21){
                 dealerTurnOver = true;
             }
             else{
                 dealerTurnOver = dealerAI();
             }
             System.out.println("Dealer turn over");
-            System.out.println("Dealer's cards: " + dealer.getDealerHand().toString());
-            System.out.println("Dealer score: " + dealer.score);
-            System.out.println("Your score: " + player.score);
-            System.out.println("" + checkWinner());
+
         }
+        System.out.println("Dealer's cards: " + dealer.getDealerHand().toString());
+        System.out.println("Dealer score: " + dealer.getScore());
+        System.out.println("Your score: " + player.getScore());
+        System.out.println("" + checkWinner());
 
     }
 
@@ -112,10 +114,10 @@ public class BlackJackGame {
     }
 
     public boolean dealerAI(){
-        while(dealer.score < 21){
-            switch(dealer.score){
+        while(dealer.getScore() < 21){
+            switch(dealer.getScore()){
                 case 17:
-                    if(player.score > 17){ //player winning, dealer draws
+                    if(player.getScore() > 17){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
                     else{ //dealer has better or equal score, turn over
@@ -123,7 +125,7 @@ public class BlackJackGame {
                     }
                     break;
                 case 18:
-                    if(player.score > 18){ //player winning, dealer draws
+                    if(player.getScore() > 18){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
                     else{ //dealer has better or equal score, turn over
@@ -131,7 +133,7 @@ public class BlackJackGame {
                     }
                     break;
                 case 19:
-                    if(player.score > 19){ //player winning, dealer draws
+                    if(player.getScore() > 19){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
                     else{ //dealer has better or equal score, turn over
@@ -139,7 +141,7 @@ public class BlackJackGame {
                     }
                     break;
                 case 20:
-                    if(player.score > 20){ //player winning, dealer draws
+                    if(player.getScore() > 20){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
                     else{ //dealer has better or equal score, turn over
@@ -154,21 +156,21 @@ public class BlackJackGame {
     }
 
     public String checkWinner(){
-        if(player.score > 21){
+        if(player.getScore() > 21){
             return "You lose!";
         }
-        else if(player.score <= 21){
-            if (dealer.score > 21) {
+        else if(player.getScore() <= 21){
+            if (dealer.getScore() > 21) {
                 return "You win!";
             }
             else {
-                if(player.score > dealer.score){
+                if(player.getScore() > dealer.getScore()){
                     return "You win!";
                 }
-                else if(dealer.score == player.score){
+                else if(dealer.getScore() == player.getScore()){
                     return "Push! Money returned";
                 }
-                else if(player.score < dealer.score){
+                else if(player.getScore() < dealer.getScore()){
                     return "You lose!";
                 }
                 else{

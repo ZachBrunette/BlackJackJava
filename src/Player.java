@@ -1,14 +1,37 @@
 public class Player {
     private Hand playerHand;
-    int score;
+    private int score;
     public Player(){
         playerHand = new Hand();
         score = 0;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore(){
+        score = 0;
+        boolean containsSoftAce = false; //soft ace is an ace that has a value of 11 instead of 1
+        for(int i = 0; i < playerHand.cardsInHand.size(); i++){
+            score += playerHand.cardsInHand.get(i).getCardRank().getValue();
+            if(playerHand.cardsInHand.get(i).getCardRank().getRank().equals("A")){
+                if(!containsSoftAce){ //hands can only have one soft ace
+                    containsSoftAce = true;
+                    score += 10;
+                }
+            }
+            if(containsSoftAce){
+                if(score > 21){ //soft ace changes value from 11 to 1 if score is over 21
+                    score -= 10;
+                }
+            }
+        }
+        return score;
+    }
+
     public void addCard(Card card){
         playerHand.cardsInHand.add(card);
-        score += card.getCardRank().getValue();
     }
 
     public Hand getPlayerHand() {
