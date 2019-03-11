@@ -1,10 +1,15 @@
 import java.util.Scanner;
 
+//TODO soft aces
+//TODO player money
+//TODO reshuffle deck
+
 public class BlackJackGame {
     Scanner scanner;
     Player player;
     Deck newDeck;
     Dealer dealer;
+    boolean nextRound;
     public BlackJackGame(){
         scanner = new Scanner(System.in);
         System.out.print("Choose the number of decks you want to play with: ");
@@ -15,13 +20,30 @@ public class BlackJackGame {
 
     public void run(){
         newDeck.shuffle();
-        playRound();
+        nextRound = true;
+        while(nextRound){
+            playRound();
+            System.out.print("Play next round? Y or N: ");
+            switch(scanner.next().toLowerCase()){
+                case "y":
+                    nextRound = true;
+                    break;
+                case "x":
+                    nextRound = false;
+                    break;
+            }
+        }
+
 
     }
 
     public void playRound(){
         boolean playerTurnOver = false;
         boolean dealerTurnOver = false;
+        player.getPlayerHand().cardsInHand.clear();
+        dealer.getDealerHand().cardsInHand.clear();
+        player.score = 0;
+        dealer.score = 0;
         String playerChoice;
         player.addCard(newDeck.drawCard());
         dealer.addCard(newDeck.drawCard());
@@ -47,8 +69,6 @@ public class BlackJackGame {
                 System.out.println("Your cards: " + player.getPlayerHand().toString());
                 System.out.println("Your score: " + player.score);
             }
-            System.out.println("Dealer's cards: " + dealer.getDealerHand().toString());
-            System.out.println("Dealer score: " + dealer.score);
             if(player.score > 21){
                 dealerTurnOver = true;
             }
@@ -58,6 +78,8 @@ public class BlackJackGame {
             System.out.println("Dealer turn over");
             System.out.println("Dealer's cards: " + dealer.getDealerHand().toString());
             System.out.println("Dealer score: " + dealer.score);
+            System.out.println("Your score: " + player.score);
+            System.out.println("" + checkWinner());
         }
 
     }
@@ -89,7 +111,7 @@ public class BlackJackGame {
                     if(player.score > 17){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
-                    else{ //dealer has better score, turn over
+                    else{ //dealer has better or equal score, turn over
                         return true;
                     }
                     break;
@@ -97,7 +119,7 @@ public class BlackJackGame {
                     if(player.score > 18){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
-                    else{ //dealer has better score, turn over
+                    else{ //dealer has better or equal score, turn over
                         return true;
                     }
                     break;
@@ -105,7 +127,7 @@ public class BlackJackGame {
                     if(player.score > 19){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
-                    else{ //dealer has better score, turn over
+                    else{ //dealer has better or equal score, turn over
                         return true;
                     }
                     break;
@@ -113,7 +135,7 @@ public class BlackJackGame {
                     if(player.score > 20){ //player winning, dealer draws
                         dealer.addCard(newDeck.drawCard());
                     }
-                    else{ //dealer has better score, turn over
+                    else{ //dealer has better or equal score, turn over
                         return true;
                     }
                     break;
@@ -122,6 +144,32 @@ public class BlackJackGame {
             }
         }
         return true;
+    }
+
+    public String checkWinner(){
+        if(player.score > 21){
+            return "You lose!";
+        }
+        else if(player.score <= 21){
+            if (dealer.score > 21) {
+                return "You win!";
+            }
+            else {
+                if(player.score > dealer.score){
+                    return "You win!";
+                }
+                else if(dealer.score == player.score){
+                    return "Push! Money returned";
+                }
+                else if(player.score < dealer.score){
+                    return "You lose!";
+                }
+                else{
+                    return "ERROR";
+                }
+            }
+        }
+        return "this should never be used";
     }
 
 }
