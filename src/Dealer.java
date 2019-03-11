@@ -9,13 +9,33 @@ public class Dealer {
 
     public void addCard(Card card){
         dealerHand.cardsInHand.add(card);
+        score += card.getCardRank().getValue();
     }
 
-    public String getDealerFaceUpCard(){
-        return dealerHand.cardsInHand.get(1).toString();
+    public Card getDealerFaceUpCard(){
+        return dealerHand.cardsInHand.get(1);
     }
 
     public String getDealerHand(){
         return dealerHand.toString();
+    }
+
+    public boolean checkBlackjack(){
+        if(score == 21) {
+            System.out.println("Dealer got Blackjack!");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean check21(){
+        if(score >= 21){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

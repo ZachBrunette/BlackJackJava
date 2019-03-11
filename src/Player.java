@@ -11,11 +11,30 @@ public class Player {
         score += card.getCardRank().getValue();
     }
 
-    public String getPlayerHand() {
-        return playerHand.toString();
+    public Hand getPlayerHand() {
+        return playerHand;
     }
 
     public int getScore(){
         return score;
+    }
+
+    public boolean checkBlackjack(){
+        if(score == 21) {
+            System.out.println("You got Blackjack!");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean check21(){
+        if(score >= 21){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
