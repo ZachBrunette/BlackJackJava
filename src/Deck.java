@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Deck {
     ArrayList<Card> playDeck;
@@ -8,10 +9,25 @@ public class Deck {
             for(CardSuit cs : CardSuit.values()){
                 for(CardRank cr : CardRank.values()){
                     playDeck.add(new Card(cs, cr));
-                    System.out.println("Created card: " + playDeck.get(playDeck.size()-1).toString());
-                    System.out.println("Number of cards in deck: " + playDeck.size());
                 }
             }
         }
+    }
+
+    public void shuffle(){
+        Random rand = new Random();
+        ArrayList<Card> tempDeck = new ArrayList<>();
+        int randomIndex;
+        Card randCard;
+        while(playDeck.size() > 0){
+            randomIndex = rand.nextInt(playDeck.size());
+            randCard = playDeck.remove(randomIndex);
+            tempDeck.add(randCard);
+        }
+        playDeck = tempDeck;
+    }
+
+    public Card drawCard(){
+        return playDeck.remove(0);
     }
 }
