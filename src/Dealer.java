@@ -16,8 +16,8 @@ public class Dealer {
         return dealerHand.cardsInHand.get(1);
     }
 
-    public String getDealerHand(){
-        return dealerHand.toString();
+    public Hand getDealerHand(){
+        return dealerHand;
     }
 
     public boolean checkBlackjack(){

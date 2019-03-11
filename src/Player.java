@@ -15,10 +15,6 @@ public class Player {
         return playerHand;
     }
 
-    public int getScore(){
-        return score;
-    }
-
     public boolean checkBlackjack(){
         if(score == 21) {
             System.out.println("You got Blackjack!");
