@@ -8,12 +8,14 @@ public class BlackJackGame {
     Scanner scanner;
     Player player;
     Deck newDeck;
+    int numDecks;
     Dealer dealer;
     boolean nextRound;
     public BlackJackGame(){
         scanner = new Scanner(System.in);
         System.out.print("Choose the number of decks you want to play with: ");
-        newDeck = new Deck(scanner.nextInt());
+        numDecks = scanner.nextInt();
+        newDeck = new Deck(numDecks);
         player = new Player();
         dealer = new Dealer();
     }
@@ -44,6 +46,11 @@ public class BlackJackGame {
         dealer.getDealerHand().cardsInHand.clear();
         player.score = 0;
         dealer.score = 0;
+        if(newDeck.playDeck.size() <= 10){
+            newDeck = new Deck(numDecks);
+            newDeck.shuffle();
+            System.out.println("Reshuffling Deck......");
+        }
         String playerChoice;
         player.addCard(newDeck.drawCard());
         dealer.addCard(newDeck.drawCard());
